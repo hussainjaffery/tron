@@ -1,45 +1,88 @@
-var bgColor = 128;
-var p1x = 220;
-var p1y = 180;
-var p2x = 260;
-var p2y = 180;
+var w = 640, h = 480;
+var p1x = w / 2 - 80, p1y = h / 2;
+var p2x = w / 2 + 80, p2y = h / 2;
+var bgColor = 23;
+var txtColor = [0, 255, 255];
+var p1 = new Player([0, 167, 247], p1x, p1y, 0);
+var p2 = new Player([135, 231, 0], p2x, p2y, 0);
 
-var p1 = new Player(0, 220, 180, 3);
-var p2 = new Player(255, 260, 180, 1);
+var state;
+const SPLASH = 0, GAME = 1;
 
+// -- DRAWING FUNCTIONS --
 function setup() {
-	createCanvas(480, 360);
+	createCanvas(w, h);
 	background(bgColor);
+	state = SPLASH;
+}
+function draw() {
+
+	if (state === SPLASH) {
+		drawSplash();
+		resetPlayers();
+		noLoop();
+	}
+
+	else if (state === GAME) {
+		renderPlayer(p1);
+		renderPlayer(p2);
+		
+		moveForward(p1);
+		moveForward(p2);
+
+		loadPixels();
+
+		if (checkDeath(p1)) {
+			alert("P2 Wins!");
+			state = SPLASH;
+		}
+		if (checkDeath(p2)) {
+			alert("P1 Wins!");
+			state = SPLASH;
+		}
+	}	
 }
 
-function draw() {
-	renderPlayer(p1);
-	renderPlayer(p2);
-	
-	moveForward(p1);
-	moveForward(p2);
+function drawSplash() {
+	strokeWeight(0);
+	textSize(72);
+	textAlign(CENTER, CENTER);
+	textFont("Verdana"); // TODO Berlin Sans FB
+	fill(txtColor);
+	text("TRON", width / 2, height * 2 / 5);
+	textSize(36);
+	text("P1: WASD | P2: IJKL", width / 2, height / 2);
+	textSize(24);
+	text("By Hussain Jaffery", width / 2, height * 3 / 5);
 }
 
 function renderPlayer(player) {
 	stroke(player.color);
+	strokeWeight(1);
 	point(player.x, player.y);
 }
 
-function moveForward (player) {
+function pixelInFront(player) {
+	var x = player.x;
+	var y = player.y;
 	switch (player.dir) {
-		case 0: player.y--; // Up
+		case 0: y--; // Up
 				break;
-		case 1: player.x++; // Right
+		case 1: x++; // Right
 				break;
-		case 2: player.y++; // Down
+		case 2: y++; // Down
 				break;
-		case 3: player.x--; // Left
+		case 3: x--; // Left
 				break;
 		default: console.log("Invalid direction");
-				break;
 	}
-	player.x = clamp(player.x, width);
-	player.y = clamp(player.y, height);
+	x = clamp(x, width);
+	y = clamp(y, height);
+	return [x, y];
+}
+
+function moveForward (player) {
+	[player.x, player.y] = pixelInFront(player);
 }
 
 function clamp(num, upperBound) {
@@ -57,8 +100,35 @@ function Player(color, x, y, dir) {
 	this.dir = dir;
 }
 
-/*
-// TODO
-// function turnPlayer() {}
-// function checkDeath () {}
-*/
+function keyPressed() {
+	if (key === 'w' || key === 'W')
+		p1.dir = 0;
+	else if (key === 'd' || key === 'D')
+		p1.dir = 1;
+    else if (key === 's' || key === 'S')
+		p1.dir = 2;
+	else if (key === 'a' ||key === 'A')
+		p1.dir = 3;
+
+	if (key === 'i' || key === 'I')
+		p2.dir = 0;
+	else if (key === 'l' || key === 'L')
+		p2.dir = 1;
+    else if (key === 'k' || key === 'K')
+		p2.dir = 2;
+	else if (key === 'j' || key === 'J')
+		p2.dir = 3;
+}
+
+function mouseClicked() {
+	if (state === SPLASH) {
+		background(bgColor);
+		state = GAME;
+		strokeWeight(1);
+		loop();
+	}
+}
+
+function checkDeath (player) {
+	return get(player.x, player.y)[0] != bgColor;
+}
