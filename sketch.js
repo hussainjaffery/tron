@@ -30,16 +30,7 @@ function draw() {
 		moveForward(p1);
 		moveForward(p2);
 
-		loadPixels();
-
-		if (checkDeath(p1)) {
-			alert("P2 Wins!");
-			state = SPLASH;
-		}
-		if (checkDeath(p2)) {
-			alert("P1 Wins!");
-			state = SPLASH;
-		}
+		checkDeaths();
 	}	
 }
 
@@ -47,7 +38,7 @@ function drawSplash() {
 	strokeWeight(0);
 	textSize(72);
 	textAlign(CENTER, CENTER);
-	textFont("Verdana"); // TODO Berlin Sans FB
+	textFont("Verdana");
 	fill(txtColor);
 	text("TRON", width / 2, height * 2 / 5);
 	textSize(36);
@@ -56,41 +47,37 @@ function drawSplash() {
 	text("By Hussain Jaffery", width / 2, height * 3 / 5);
 }
 
-function renderPlayer(player) {
-	stroke(player.color);
-	strokeWeight(1);
-	point(player.x, player.y);
+function resetPlayers() {
+	p1.x = p1x;
+	p1.y = p1y;
+	p2.x = p2x;
+	p2.y = p2y;
+	p1.dir = 0;
+	p2.dir = 0;
 }
 
-function pixelInFront(player) {
-	var x = player.x;
-	var y = player.y;
-	switch (player.dir) {
-		case 0: y--; // Up
-				break;
-		case 1: x++; // Right
-				break;
-		case 2: y++; // Down
-				break;
-		case 3: x--; // Left
-				break;
-		default: console.log("Invalid direction");
-	}
-	x = clamp(x, width);
-	y = clamp(y, height);
-	return [x, y];
+function renderPlayer(player) {
+	stroke(player.color);
+	point(player.x, player.y);
 }
 
 function moveForward (player) {
 	[player.x, player.y] = pixelInFront(player);
 }
 
-function clamp(num, upperBound) {
-	if (num < 0)
-		num += upperBound;
-	else if (num > upperBound)
-		num -= upperBound;
-	return num;
+function isDead(player) {
+	return get(player.x, player.y)[0] != bgColor;
+}
+
+function checkDeaths() {
+	if (isDead(p1)  || isDead(p2)) {
+		if (isDead(p1)  && isDead(p2))
+			alert("Tie game!");
+		else if (isDead(p1))
+			alert("P2 Wins!");
+		else alert ("P1 Wins!")
+		state = SPLASH;
+	}
 }
 
 function Player(color, x, y, dir) {
@@ -129,6 +116,30 @@ function mouseClicked() {
 	}
 }
 
-function checkDeath (player) {
-	return get(player.x, player.y)[0] != bgColor;
+function pixelInFront(player) {
+	var x = player.x;
+	var y = player.y;
+	switch (player.dir) {
+		case 0: y--; // Up
+				break;
+		case 1: x++; // Right
+				break;
+		case 2: y++; // Down
+				break;
+		case 3: x--; // Left
+				break;
+		default: //console.log("Invalid direction");
+				break;
+	}
+	x = clamp(x, width);
+	y = clamp(y, height);
+	return [x, y];
+}
+
+function clamp(num, upperBound) {
+	if (num < 0)
+		num += upperBound;
+	else if (num > upperBound)
+		num -= upperBound;
+	return num;
 }
