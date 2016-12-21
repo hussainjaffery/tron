@@ -3,8 +3,8 @@ var p1x = w / 2 - 80, p1y = h / 2;
 var p2x = w / 2 + 80, p2y = h / 2;
 var bgColor = 23;
 var txtColor = [0, 255, 255];
-var p1 = new Player([0, 167, 247], p1x, p1y, 0);
-var p2 = new Player([135, 231, 0], p2x, p2y, 0);
+var p1 = new Player([0, 167, 247]);
+var p2 = new Player([135, 231, 0]);
 
 var state;
 const SPLASH = 0, GAME = 1;
@@ -80,30 +80,27 @@ function checkDeaths() {
 	}
 }
 
-function Player(color, x, y, dir) {
+function Player(color) { // Other attributes: x, y, dir
 	this.color = color;
-	this.x = x;
-	this.y = y;
-	this.dir = dir;
 }
 
 function keyPressed() {
-	if (key === 'w' || key === 'W')
+	if (p1.dir != 2 && (key === 'w' || key === 'W'))
 		p1.dir = 0;
-	else if (key === 'd' || key === 'D')
+	else if (p1.dir != 3 && (key === 'd' || key === 'D'))
 		p1.dir = 1;
-    else if (key === 's' || key === 'S')
+    else if (p1.dir != 0 && (key === 's' || key === 'S'))
 		p1.dir = 2;
-	else if (key === 'a' ||key === 'A')
+	else if (p1.dir != 1 && (key === 'a' ||key === 'A'))
 		p1.dir = 3;
 
-	if (key === 'i' || key === 'I')
+	if (p2.dir != 2 && (key === 'i' || key === 'I'))
 		p2.dir = 0;
-	else if (key === 'l' || key === 'L')
+	else if (p2.dir != 3 && (key === 'l' || key === 'L'))
 		p2.dir = 1;
-    else if (key === 'k' || key === 'K')
+    else if (p2.dir != 0 && (key === 'k' || key === 'K'))
 		p2.dir = 2;
-	else if (key === 'j' || key === 'J')
+	else if (p2.dir != 1 && (key === 'j' || key === 'J'))
 		p2.dir = 3;
 }
 
