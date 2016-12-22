@@ -136,7 +136,7 @@ function pixelInFront(player) {
 function clamp(num, upperBound) {
 	if (num < 0)
 		num += upperBound;
-	else if (num > upperBound)
+	else if (num >= upperBound)
 		num -= upperBound;
 	return num;
 }
