@@ -25,11 +25,9 @@ function draw() {
 
 	else if (state === GAME) {
 		renderPlayer(p1);
-		renderPlayer(p2);
-		
+		renderPlayer(p2);		
 		moveForward(p1);
 		moveForward(p2);
-
 		checkDeaths();
 	}	
 }
@@ -41,10 +39,8 @@ function drawSplash() {
 	textFont("Verdana");
 	fill(txtColor);
 	text("TRON", width / 2, height * 2 / 5);
-	textSize(36);
-	text("P1: WASD | P2: IJKL", width / 2, height / 2);
-	textSize(24);
-	text("By Hussain Jaffery", width / 2, height * 3 / 5);
+	textSize(30);
+	text("P1: WASD | P2: IJKL\nClick anywhere to begin!", width / 2, height * 3 / 5);
 }
 
 function resetPlayers() {
@@ -65,10 +61,6 @@ function moveForward (player) {
 	[player.x, player.y] = pixelInFront(player);
 }
 
-function isDead(player) {
-	return get(player.x, player.y)[0] != bgColor;
-}
-
 function checkDeaths() {
 	if (isDead(p1)  || isDead(p2)) {
 		if (isDead(p1)  && isDead(p2))
@@ -78,6 +70,10 @@ function checkDeaths() {
 		else alert ("P1 Wins!")
 		state = SPLASH;
 	}
+}
+
+function isDead(player) {
+	return get(player.x, player.y)[0] != bgColor;
 }
 
 function Player(color) { // Other attributes: x, y, dir
