@@ -40,7 +40,7 @@ function drawSplash() {
 	fill(txtColor);
 	text("TRON", width / 2, height * 2 / 5);
 	textSize(30);
-	text("P1: WASD | P2: IJKL\nClick anywhere to begin!", width / 2, height * 3 / 5);
+	text("P1: WASD | P2: KEY ARROWS\nClick anywhere to begin!", width / 2, height * 3 / 5);
 }
 
 function resetPlayers() {
@@ -90,13 +90,13 @@ function keyPressed() {
 	else if (p1.dir != 1 && (key === 'a' ||key === 'A'))
 		p1.dir = 3;
 
-	if (p2.dir != 2 && (key === 'i' || key === 'I'))
+	if (p2.dir != 2 && (keyCode === UP_ARROW)
 		p2.dir = 0;
-	else if (p2.dir != 3 && (key === 'l' || key === 'L'))
+	else if (p2.dir != 3 && keyCode === RİGHT_ARROW)
 		p2.dir = 1;
-    else if (p2.dir != 0 && (key === 'k' || key === 'K'))
+    else if (p2.dir != 0 && keyCode === LEFT_ARROW)
 		p2.dir = 2;
-	else if (p2.dir != 1 && (key === 'j' || key === 'J'))
+	else if (p2.dir != 1 && (keyCode === DOWN_ARROW)
 		p2.dir = 3;
 }
 
